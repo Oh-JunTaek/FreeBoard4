@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/inputid"
         android:layout_width="210dp"
         android:layout_height="78dp"
         android:layout_marginStart="99dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumberPassword"
+        android:id="@+id/inputpw"
         android:layout_width="210dp"
         android:layout_height="78dp"
         android:layout_marginStart="100dp"
