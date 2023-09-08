@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 class FourActivity : AppCompatActivity() {
 
@@ -49,23 +50,19 @@ class FourActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("Posts")
+        val db = FirebaseFirestore.getInstance()
+        db.collection("Posts")
+            .get()
+            .addOnSuccessListener { result ->
+                // Firestore에서 'Posts' 컬렉션의 모든 문서의 데이터를 리스트로 만듭니다.
+                val postList = result.map { document -> document.data }
 
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Get Post object and use the values to update the UI.
-                val title = dataSnapshot.child("post_title").getValue(String::class.java)
-
-//                // 불러온 제목과 내용을 TextView에 설정합니다.
-//                val adapter = ArrayAdapter(this@FourActivity, R.layout.simple_list_item_1, title)
-//                binding.view2.adapter = adapter
+                // 불러온 게시글 목록을 ListView에 표시합니다.
+                val adapter = ArrayAdapter(this@FourActivity, android.R.layout.simple_list_item_1, postList)
+                binding.view2.adapter = adapter
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message.
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
             }
-        })
     }
 }

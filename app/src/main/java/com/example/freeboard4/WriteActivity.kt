@@ -2,14 +2,17 @@ package com.example.freeboard4
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.example.freeboard4.databinding.ActivityFourBinding
 import com.example.freeboard4.databinding.ActivityWriteBinding
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.concurrent.TimeUnit
 
 class WriteActivity : AppCompatActivity() {
@@ -20,7 +23,6 @@ class WriteActivity : AppCompatActivity() {
         binding = ActivityWriteBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        setContentView(R.layout.activity_write)
 
         binding.btngomain.setOnClickListener {
             AlertDialog.Builder(this)
@@ -56,15 +58,27 @@ class WriteActivity : AppCompatActivity() {
                 .create().show()
         }
         binding.btnwritefin.setOnClickListener {
+            Log.d("WriteActivity", "Button clicked")
             val title = binding.editTitle.text.toString()
             val content = binding.editContent.text.toString()
 
-            // Firebase Realtime Database에 제목과 내용을 저장합니다.
-            val database = FirebaseDatabase.getInstance()
-            val myRef = database.getReference("Posts")
+            // Firebase Firestore에 제목과 내용을 저장합니다.
+            val db = FirebaseFirestore.getInstance()
 
-            myRef.child("post_title").setValue(title)
-            myRef.child("post_content").setValue(content)
+            // 게시물의 정보를 Map 형태로 구성합니다.
+            val post: MutableMap<String, Any> = HashMap()
+            post["title"] = title
+            post["content"] = content
+
+            // 'Posts' 컬렉션에 새 문서를 추가하고, 성공/실패 여부를 로그로 출력합니다.
+            db.collection("Posts")
+                .add(post)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }
 
             // FourActivity로 돌아갑니다.
             startActivity(Intent(this@WriteActivity, FourActivity::class.java))
