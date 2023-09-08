@@ -57,9 +57,9 @@ class FourActivity : AppCompatActivity() {
                 // Get Post object and use the values to update the UI.
                 val title = dataSnapshot.child("post_title").getValue(String::class.java)
 
-                // 불러온 제목과 내용을 TextView에 설정합니다.
-                val adapter = ArrayAdapter(this@FourActivity, R.layout.simple_list_item_1, title)
-                binding.view2.adapter = adapter
+//                // 불러온 제목과 내용을 TextView에 설정합니다.
+//                val adapter = ArrayAdapter(this@FourActivity, R.layout.simple_list_item_1, title)
+//                binding.view2.adapter = adapter
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
