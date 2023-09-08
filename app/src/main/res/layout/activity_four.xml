@@ -11,7 +11,7 @@
         android:layout_width="159dp"
         android:layout_height="68dp"
         android:layout_marginStart="127dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="127dp"
         android:text="자유게시판"
         android:textSize="34sp"

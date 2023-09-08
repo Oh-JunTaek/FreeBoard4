@@ -1,5 +1,6 @@
 package com.example.freeboard4
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -28,6 +29,11 @@ class FourActivity : AppCompatActivity() {
                 binding.view2.visibility = View.GONE
                 binding.view1.visibility = View.VISIBLE
             }
+        }
+
+        binding.btnwrite.setOnClickListener {
+            val intent = Intent(this, WriteActivity::class.java)
+            startActivity(intent)
         }
     }
 }
