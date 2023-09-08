@@ -7,10 +7,30 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/txthi"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
+        android:text="반갑습니다!"
+        android:textAlignment="center"
+        android:textIsSelectable="false"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnstart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="458dp"
+        android:layout_marginEnd="155dp"
+        android:text="시작하기"
+        android:textColor="#FF9800"
+        android:textColorHighlight="#FF0000"
+        android:textColorHint="#FF0000"
+        android:textColorLink="#FF0000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
