@@ -55,10 +55,10 @@ class FourActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 // Firestore에서 'Posts' 컬렉션의 모든 문서의 데이터를 리스트로 만듭니다.
-                val postList = result.map { document -> document.data }
+                val titleList = result.mapNotNull { document -> document.getString("title") }
 
                 // 불러온 게시글 목록을 ListView에 표시합니다.
-                val adapter = ArrayAdapter(this@FourActivity, android.R.layout.simple_list_item_1, postList)
+                val adapter = ArrayAdapter(this@FourActivity, android.R.layout.simple_list_item_1, titleList)
                 binding.view2.adapter = adapter
             }
             .addOnFailureListener { exception ->
