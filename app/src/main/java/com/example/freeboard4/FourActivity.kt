@@ -1,14 +1,23 @@
 package com.example.freeboard4
 
+import android.R
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import com.example.freeboard4.databinding.ActivityFourBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class FourActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFourBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFourBinding.inflate(layoutInflater)
@@ -35,5 +44,28 @@ class FourActivity : AppCompatActivity() {
             val intent = Intent(this, WriteActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val database = FirebaseDatabase.getInstance()
+        val myRef = database.getReference("Posts")
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Get Post object and use the values to update the UI.
+                val title = dataSnapshot.child("post_title").getValue(String::class.java)
+
+                // 불러온 제목과 내용을 TextView에 설정합니다.
+                val adapter = ArrayAdapter(this@FourActivity, R.layout.simple_list_item_1, title)
+                binding.view2.adapter = adapter
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Getting Post failed, log a message.
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+            }
+        })
     }
 }
