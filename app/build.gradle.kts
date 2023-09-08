@@ -6,6 +6,9 @@ plugins {
 android {
     namespace = "com.example.freeboard4"
     compileSdk = 33
+    viewBinding {
+        enable = true
+    }
 
     defaultConfig {
         applicationId = "com.example.freeboard4"
