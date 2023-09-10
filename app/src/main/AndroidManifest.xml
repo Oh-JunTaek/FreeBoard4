@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FreeBoard4"
         tools:targetApi="31">
+        <activity
+            android:name=".FBActivity"
+            android:exported="false" />
 
         <receiver android:name=".DeleteDraftReceiver" />
-
 
         <activity
             android:name=".WriteActivity"
@@ -33,7 +35,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

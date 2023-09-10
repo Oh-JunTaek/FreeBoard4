@@ -1,6 +1,6 @@
 package com.example.freeboard4
 
-import android.R
+import com.example.freeboard4.R
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -41,28 +41,44 @@ class FourActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnwrite.setOnClickListener {
-            val intent = Intent(this, WriteActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
         val db = FirebaseFirestore.getInstance()
+
         db.collection("Posts")
             .get()
             .addOnSuccessListener { result ->
-                // Firestore에서 'Posts' 컬렉션의 모든 문서의 데이터를 리스트로 만듭니다.
-                val titleList = result.mapNotNull { document -> document.getString("title") }
+                // Firestore에서 'Posts' 컬렉션의 모든 문서의 데이터와 ID를 맵으로 만듭니다.
+                val postMap = result.mapNotNull { document -> Pair(document.id, document.getString("title")) }.toMap()
 
                 // 불러온 게시글 목록을 ListView에 표시합니다.
-                val adapter = ArrayAdapter(this@FourActivity, android.R.layout.simple_list_item_1, titleList)
-                binding.view2.adapter = adapter
+                val adapter = ArrayAdapter(this@FourActivity, android.R.layout.simple_list_item_1, postMap.values.toList())
+
+                runOnUiThread {
+                    with(binding) {
+                        view2.adapter=adapter
+
+                        // ListView 아이템 클릭 리스너 설정
+                        view2.setOnItemClickListener { parent, _, position, _ ->
+                            val postId=postMap.keys.elementAt(position)
+                            Intent(this@FourActivity,
+                                FBActivity::class.java).apply{
+                                putExtra("postId",postId)
+                                startActivity(this)
+                            }
+                        }
+                    }
+
+                    Log.d(TAG,"Successfully loaded the posts.")
+
+                }
+
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents.", exception)
             }
+
+        binding.btnwrite.setOnClickListener {
+            val intent = Intent(this, WriteActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
